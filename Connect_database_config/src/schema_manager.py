@@ -1,5 +1,4 @@
 from enum import unique
-from wsgiref.validate import validator
 from pathlib import Path
 from mysql.connector import Error
 
@@ -29,13 +28,13 @@ def create_mongodb_schema(db):
         }
     })
 
-    db.Users.create_index("user_id", unique = True)
+    # db.Users.create_index("user_id", unique = True)
 
 def validate_mongodb_schema(db):
     collections = db.list_collection_names()
     # print(collections)
     if "Users" not in collections:
-        raise ValueError(f"---------->>>Minsing collections in MongoDB")
+        raise ValueError(f"---------->>>Mins    ing collections in MongoDB")
     user = db.Users.find_one({"user_id":1})
     if not user:
         raise ValueError(f"---------->>>User id not found in MongoDB")
@@ -46,14 +45,13 @@ SQL_FILE_PATH = Path("D:/Project File/Pycharm/DE-ETL-102/Connect_database_config
 def create_mySQL_schema(connection, cursor):
     database = "github_data"
     cursor.execute(f"DROP DATABASE IF EXISTS {database}")
-    cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{database}`")
+    cursor.execute(f"CREATE DATABASE `{database}`")
     print(f"---------->>>CREATED DATABASE  {database} IN MYSQL")
     connection.database = database
     try:
         with open(SQL_FILE_PATH, "r") as file:
             sql_script = file.read()
             sql_commands = [cmd.strip() for cmd in sql_script.split(";") if cmd.strip()]
-            connection.commit()
             for cmd in sql_commands:
                 cursor.execute(cmd)
                 print(f"---------->>>Executed Mysql commands")
