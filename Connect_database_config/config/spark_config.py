@@ -13,12 +13,11 @@ class SparkConnect:
             driver_memory: Optional[str] = "2g",
             num_executor: Optional[int] = 3,
             jar_packages: Optional[List[str]] = None,
-            local_jar: Optional[List[str]] = None,
             spark_conf: Optional[Dict[str, str]] = None,
             log_level: str = "WARN"
     ):
         self.app_name = app_name
-        self.spark = self.create_spark_session(master_url, executor_memory, executor_cores, driver_memory, num_executor, jar_packages,local_jar, spark_conf, log_level)
+        self.spark = self.create_spark_session(master_url, executor_memory, executor_cores, driver_memory, num_executor, jar_packages, spark_conf)
 
 
     def create_spark_session(
@@ -30,7 +29,6 @@ class SparkConnect:
             driver_memory : Optional[str] = "2g",
             num_executor : Optional[int] = 3,
             jar_packages : Optional[List[str]] = None,
-            local_jar: Optional[List[str]] = None,
             spark_conf : Optional[Dict[str,str]] = None,
             log_level : str = "WARN"
 
@@ -52,22 +50,12 @@ class SparkConnect:
         # if jars:
         #     jars_path = ",".join([os.path.abspath(jar) for jar in jars])
         #     builder.config("spark.jars", jars_path)
-        # if jar_packages:
-        #     jar_packages_url = ",".join([jar_package for jar_package in jar_packages])
-        #     builder.config("spark.jars.packages", jar_packages_url)
-        # {"spark.sql.shuffle.partitons" : "10"}
-        # if spark_conf:
-        #     for key, value in spark_conf.items():
-        #         builder.config(key, value)
         if jar_packages:
-            builder.config("spark.jars.packages", ",".join(jar_packages))
-
-        # Gộp cả local jar nếu có
-        jars_combined = []
-        if local_jar:
-            jars_combined.extend(local_jar)
-        if jars_combined:
-            builder.config("spark.jars", ",".join(jars_combined))
+            jar_packages_url = ",".join([jar_package for jar_package in jar_packages])
+            builder.config("spark.jars.packages", jar_packages_url)
+        if spark_conf:
+            for key, value in spark_conf.items():
+                builder.config(key, value)
 
         spark = builder.getOrCreate()
 
@@ -78,7 +66,7 @@ class SparkConnect:
     def stop(self):
         if self.spark:
             self.spark.stop()
-            print("Stop SparkSession")
+            print("---------->>>Stop SparkSession")
 
 
 def get_spark_config() -> Dict :

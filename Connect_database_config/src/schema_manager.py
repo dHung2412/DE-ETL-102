@@ -46,6 +46,7 @@ def create_mySQL_schema(connection, cursor):
     database = "github_data"
     cursor.execute(f"DROP DATABASE IF EXISTS {database}")
     cursor.execute(f"CREATE DATABASE `{database}`")
+    connection.commit()
     print(f"---------->>>CREATED DATABASE  {database} IN MYSQL")
     connection.database = database
     try:

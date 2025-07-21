@@ -9,9 +9,7 @@ class Database_config:
     def validate(self) -> None:
         for key, value in self.__dict__.items():
             if value is None:
-                raise ValueError(f"--------Missing config for {key}--------")
-
-
+                raise ValueError(f"---------->>>Missing config for {key}")
 
 @dataclass
 class MongoDBConfig(Database_config):
@@ -70,6 +68,6 @@ def get_database_config()-> Dict[str,Database_config]:
         setting.validate()
     return config
 
-test = get_database_config()
+# test = get_database_config()
 # print(test)
 

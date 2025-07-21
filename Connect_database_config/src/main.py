@@ -1,10 +1,8 @@
 from Connect_database_config.database.mongodb_connect import MongoDBConnect
 from Connect_database_config.database.mysql_connect import MySQLConnect
-from Connect_database_config.database.redis_connect import RedisConnect
 from Connect_database_config.config.database_config import get_database_config
 from Connect_database_config.src.schema_manager import create_mongodb_schema, validate_mongodb_schema
 from Connect_database_config.src.schema_manager import create_mySQL_schema, validate_mysql_schema
-from Connect_database_config.src.schema_manager import create_redis_schema, validated_redis_schema
 
 
 def main(config):
